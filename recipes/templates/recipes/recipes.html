@@ -1,0 +1,54 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<style>
+        table, th, td {
+        border: 1px solid black;
+        padding: 3px;
+        border-collapse: collapse;
+        text-align: center;
+        }
+        h2 {text-align: center;
+        }
+
+
+</style>
+<div class="row">
+    <h2>Recipes</h2>
+
+    <table style="width:100%">
+
+        <tr>
+            <th>Name</th>
+            <th>Diet type</th>
+            <th>Cuisine</th>
+            <th>Difficulty level</th>
+            <th>Meal type</th>
+            <th>Ingredients</th>
+            <th>Prepare time</th>
+            <th>Calorie</th>
+            <th>Cost</th>
+            <th>Description</th>
+        </tr>
+        {% for obj in recipe_list %}
+        <tr>
+            <td>{{obj.name}}</td>
+            <td> {{obj.diet_type}}</td>
+            <td> {{obj.cuisine}}</td>
+            <td>{{obj.difficulty_level}}</td>
+            <td> {{obj.meal_type}}</td>
+            <td> {{obj.ingredients}}</td>
+            <td>{{obj.prepare_time}}</td>
+            <td> {{obj.calorie}}</td>
+            <td> {{obj.cost}}</td>
+            <td> {{obj.description}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</div>
+
+{% endblock %}
+
+
+

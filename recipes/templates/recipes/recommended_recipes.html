@@ -1,0 +1,36 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<style>
+        table, th, td {
+        border: 1px solid black;
+        padding: 3px;
+        border-collapse: collapse;
+        text-align: center;
+        }
+        h2 {text-align: center;
+        }
+
+
+</style>
+<div class="row">
+    <h2>Recommended recipes</h2>
+
+    <table style="width:100%">
+
+        <tr>
+            <th>Name</th>
+        </tr>
+        {% for obj in recipe_list %}
+        <tr>
+            <td><a href="/recommended/{{obj.name}}/">{{obj.name}}</a></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</div>
+
+{% endblock %}
+
+
+

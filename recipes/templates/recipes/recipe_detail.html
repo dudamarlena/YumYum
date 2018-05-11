@@ -1,0 +1,21 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <h2>{{ object.name }}</h2>
+    <p>Rodzaj kuchni: {{ object.cuisine }}</p>
+    <p>Rodzaj posiłku: {{ object.meal_type }}</p>
+    <p>Rodzaj diety: {{ object.diet_type }}</p>
+    <p>Poziom trudności: {{ object.difficulty_level }}</p>
+    <p>Ilość kalorii: {{ object.calorie }}</p>
+    <p>Składniki: {{ object.ingredients }}</p>
+    <p>Czas przygotowania: {{ object.prepare_time }}</p>
+    <p>Kosz dokupienia składników: {{ object.cost }}</p>
+    <p>Opis: {{ object.description }}</p>
+</div>
+
+{% endblock %}
+
+
+
