@@ -30,6 +30,7 @@ class Recipe(models.Model):
         ('deser', 'deser')
     )
 
+    id = models.IntegerField(default=0)
     name = models.CharField(max_length=1000, null=False, primary_key=True)
     diet_type = models.CharField(max_length=20, choices=DIET_TYPE, default='brak')
     cuisine = models.CharField(max_length=20, choices=CUISINE, default='brak')
@@ -40,6 +41,7 @@ class Recipe(models.Model):
     calorie = models.IntegerField(default=0)
     cost = models.IntegerField(default=0)
     description = models.CharField(max_length=100000, null=False, default=None)
+
 
     def __str__(self):
         return '%s' % (self.name)

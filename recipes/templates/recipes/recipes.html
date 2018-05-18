@@ -17,8 +17,8 @@
     <h2>Recipes</h2>
 
     <table style="width:100%">
-
         <tr>
+            <th>Id</th>
             <th>Name</th>
             <th>Diet type</th>
             <th>Cuisine</th>
@@ -28,10 +28,10 @@
             <th>Prepare time</th>
             <th>Calorie</th>
             <th>Cost</th>
-            <th>Description</th>
         </tr>
         {% for obj in recipe_list %}
         <tr>
+            <td>{{obj.id}}</td>
             <td>{{obj.name}}</td>
             <td> {{obj.diet_type}}</td>
             <td> {{obj.cuisine}}</td>
@@ -41,7 +41,6 @@
             <td>{{obj.prepare_time}}</td>
             <td> {{obj.calorie}}</td>
             <td> {{obj.cost}}</td>
-            <td> {{obj.description}}</td>
         </tr>
         {% endfor %}
 
