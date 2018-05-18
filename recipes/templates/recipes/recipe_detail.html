@@ -4,15 +4,16 @@
 
 <div class="row">
     <h2>{{ object.name }}</h2>
-    <p>Rodzaj kuchni: {{ object.cuisine }}</p>
-    <p>Rodzaj posiłku: {{ object.meal_type }}</p>
-    <p>Rodzaj diety: {{ object.diet_type }}</p>
-    <p>Poziom trudności: {{ object.difficulty_level }}</p>
-    <p>Ilość kalorii: {{ object.calorie }}</p>
-    <p>Składniki: {{ object.ingredients }}</p>
-    <p>Czas przygotowania: {{ object.prepare_time }}</p>
-    <p>Kosz dokupienia składników: {{ object.cost }}</p>
-    <p>Opis: {{ object.description }}</p>
+    <p><b>Rodzaj kuchni:</b> {{ object.cuisine }}</p>
+    <p><b>Rodzaj posiłku:</b>  {{ object.meal_type }}</p>
+    <p><b>Rodzaj diety:</b>  {{ object.diet_type }}</p>
+    <p><b>Poziom trudności:</b>  {{ object.difficulty_level }}</p>
+    <p><b>Ilość kalorii:</b>  {{ object.calorie }}</p>
+    <p><b>Składniki:</b>  {{ object.ingredients }}</p>
+    <p><b>Czas przygotowania:</b>  {{ object.prepare_time }}</p>
+    <p><b>Kosz dokupienia składników:</b>  {{ object.cost }}</p>
+    <p><b>Opis:</b></p>
+    <p>{{ object.description }}</p>
 </div>
 
 {% endblock %}

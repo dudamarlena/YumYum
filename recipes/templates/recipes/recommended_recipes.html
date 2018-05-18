@@ -19,11 +19,17 @@
     <table style="width:100%">
 
         <tr>
-            <th>Name</th>
+            <th>Nazwa</th>
+            <th>Koszt</th>
+            <th>Kalorie</th>
+            <th>Czas przygotowania</th>
         </tr>
-        {% for obj in recipe_list %}
+        {% for obj in recipes %}
         <tr>
-            <td><a href="/recommended/{{obj.name}}/">{{obj.name}}</a></td>
+            <td><a href="/recommended/{{obj.id}}/">{{obj.name}}</a></td>
+            <td>{{obj.cost}}</td>
+            <td>{{obj.calorie}}</td>
+            <td>{{obj.prepare_time}}</td>
         </tr>
         {% endfor %}
 

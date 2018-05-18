@@ -30,8 +30,8 @@ class Recipe(models.Model):
         ('deser', 'deser')
     )
 
-    id = models.IntegerField(default=0)
-    name = models.CharField(max_length=1000, null=False, primary_key=True)
+    id = models.IntegerField(primary_key=True, null=False)
+    name = models.CharField(max_length=1000, null=False)
     diet_type = models.CharField(max_length=20, choices=DIET_TYPE, default='brak')
     cuisine = models.CharField(max_length=20, choices=CUISINE, default='brak')
     difficulty_level = models.CharField(max_length=20, choices=DIFFICULTY_LEVEL, default='sredni')
