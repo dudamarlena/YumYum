@@ -3,11 +3,11 @@
 {% block content %}
 
 <div class="row">
-    <h1>Search recipes</h1>
+    <h1>Szukaj przepisów</h1>
 
     <form method="POST"> {%csrf_token%}
         {{ form.as_p }}
-        <button type="submit">Search recipe</button>
+        <button type="submit">Szukaj</button>
     </form>
 </div>
 

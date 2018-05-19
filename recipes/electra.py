@@ -22,13 +22,13 @@ def electre_III_method(user_choices):
     fi_array = get_fi3_array(time, cost, kcal, weights, preference_thresholds, equivalence_thresholds)
     c_array = get_c_array(fi_array)
     reliability_coefficient = get_reliability_coefficient([time, cost, kcal], c_array, preference_thresholds, veto)
-    print(c_array)
-    return reliability_coefficient
+    recipes_dictionary = get_dictionary(reliability_coefficient, recipes)
+    return  sort_recipes(recipes_dictionary) # doesn't work until sort_recipes method work
 
 
 def get_reliability_coefficient(criteria, c_array, preference_thresholds, veto):
     return [value if get_d_list(criteria, preference_thresholds, veto) <= value else value * (
-    (1 - get_d_list(criteria, preference_thresholds, veto)) / 1 - value) for value in c_array]
+        (1 - get_d_list(criteria, preference_thresholds, veto)) / 1 - value) for value in c_array]
 
 
 def get_c_array(fi_array, s=0.5):
@@ -118,19 +118,25 @@ def get_possible_recipes(user_choices):
     possible_recipes_list = []
     all_recipes = get_all_recipes()
     for recipe in all_recipes:
-        condition1 = recipe['diet_type'] == user_choices['diet_type'] or user_choices['diet_type'] == 'brak'
+        condition1 = recipe['diet type'] == user_choices['diet type'] or user_choices['diet type'] == 'brak'
         condition2 = recipe['cuisine'] == user_choices['cuisine'] or user_choices['cuisine'] == 'brak'
-        condition3 = recipe['difficulty_level'] == user_choices['difficulty_level'] or user_choices[
-                                                                                           'difficulty_level'] == 'brak'
-        condition4 = recipe['meal_type'] == user_choices['meal_type'] or user_choices['meal_type'] == 'brak'
-        condition5 = [ingredient for ingredient in recipe['ingredients'] if
-                      any(allergen in ingredient for allergen in user_choices['allergens'])]
+        condition3 = recipe['difficulty level'] == user_choices['difficulty level'] or user_choices[
+                                                                                           'difficulty level'] == 'brak'
+        condition4 = recipe['meal type'] == user_choices['meal type'] or user_choices['meal type'] == 'brak'
+        condition5 = [ingredient for ingredient in split_strings(recipe['ingredients']) if
+                      any(allergen in ingredient for allergen in split_strings(user_choices['allergens']))]
+        print(recipe['name'])
+        print(recipe['prepare_time'])
         condition6 = int(user_choices['prepare_time']) >= int(recipe['prepare_time'])
         condition7 = int(user_choices['calorie']) >= int(recipe['calorie'])
         condition8 = int(user_choices['cost']) >= int(recipe['cost'])
         if condition1 and condition2 and condition3 and condition4 and not condition5 and condition6 and condition7 and condition8:
             possible_recipes_list.append(recipe)
     return possible_recipes_list
+
+
+def split_strings(strings):
+    return strings.split(',')
 
 
 def get_all_recipes():
@@ -146,3 +152,9 @@ def get_dictionary(electre_values, recipes):
     for pair in (prod_list):
         electre_data.append({'pair': pair[0], 'value': pair[1]})
     return electre_data
+
+
+def sort_recipes(recipes_dictionary):
+    #return sorted recipes dictionary in the same format like in recipes_utils
+    #{'name': '', 'diet type': '', 'cuisine': '', 'difficulty level': '', 'meal type': '', 'ingredients': '', 'prepare time': '', 'calorie': '', 'cost': ''}
+    pass
