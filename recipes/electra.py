@@ -23,7 +23,7 @@ def electre_III_method(user_choices):
     c_array = get_c_array(fi_array)
     reliability_coefficient = get_reliability_coefficient([time, cost, kcal], c_array, preference_thresholds, veto)
     recipes_dictionary = get_dictionary(reliability_coefficient, recipes)
-    return  sort_recipes(recipes_dictionary) # doesn't work until sort_recipes method work
+    return sort_recipes(recipes_dictionary)  # doesn't work until sort_recipes method work
 
 
 def get_reliability_coefficient(criteria, c_array, preference_thresholds, veto):
@@ -125,12 +125,12 @@ def get_possible_recipes(user_choices):
         condition4 = recipe['meal type'] == user_choices['meal type'] or user_choices['meal type'] == 'brak'
         condition5 = [ingredient for ingredient in split_strings(recipe['ingredients']) if
                       any(allergen in ingredient for allergen in split_strings(user_choices['allergens']))]
-        print(recipe['name'])
-        print(recipe['prepare_time'])
-        condition6 = int(user_choices['prepare_time']) >= int(recipe['prepare_time'])
-        condition7 = int(user_choices['calorie']) >= int(recipe['calorie'])
-        condition8 = int(user_choices['cost']) >= int(recipe['cost'])
-        if condition1 and condition2 and condition3 and condition4 and not condition5 and condition6 and condition7 and condition8:
+        condition6 = [ingredient for ingredient in split_strings(recipe['ingredients']) if
+                      any(allergen in ingredient for allergen in split_strings(user_choices['products']))]
+        condition7 = int(user_choices['prepare_time']) >= int(recipe['prepare_time'])
+        condition8 = int(user_choices['calorie']) >= int(recipe['calorie'])
+        condition9 = int(user_choices['cost']) >= int(recipe['cost'])
+        if condition1 and condition2 and condition3 and condition4 and not condition5 and condition6 and condition7 and condition8 and condition9:
             possible_recipes_list.append(recipe)
     return possible_recipes_list
 
@@ -155,6 +155,6 @@ def get_dictionary(electre_values, recipes):
 
 
 def sort_recipes(recipes_dictionary):
-    #return sorted recipes dictionary in the same format like in recipes_utils
-    #{'name': '', 'diet type': '', 'cuisine': '', 'difficulty level': '', 'meal type': '', 'ingredients': '', 'prepare time': '', 'calorie': '', 'cost': ''}
+    # return sorted recipes dictionary in the same format like in recipes_utils
+    # {'name': '', 'diet type': '', 'cuisine': '', 'difficulty level': '', 'meal type': '', 'ingredients': '', 'prepare time': '', 'calorie': '', 'cost': ''}
     pass

@@ -33,6 +33,7 @@ class SearchRecipeForm(forms.Form):
     difficulty_level = forms.ChoiceField(choices=DIFFICULTY_LEVEL, required=False, label='Poziom trudności')
     meal_type = forms.ChoiceField(choices=MEAL_TYPE, required=False, label='Rodzaj posiłku')
     allergens = forms.CharField(required=False, label='Alergeny', initial='brak')
+    products = forms.CharField(required=False, label='Produkty, które mamy w kuchni', initial='brak')
     prepare_time = forms.IntegerField(required=False, label='Czas przygotowania [min]', initial=100)
     calorie = forms.IntegerField(required=False, label='Ilość kalorii', initial=1000)
     cost = forms.IntegerField(required=False, label='Koszt przygotowania posiłku [zł]', initial=100)

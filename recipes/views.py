@@ -32,7 +32,7 @@ def search_recipe(request):
                             'difficulty level': form.data['difficulty_level'],
                             'meal type': form.data['meal_type'], 'allergens': form.data['allergens'],
                             'prepare_time': form.data['prepare_time'], 'calorie': form.data['calorie'],
-                            'cost': form.data['cost']}
+                            'cost': form.data['cost'],'products': form.data['products']}
             # electre_list = electre_III_method(user_choices)
             recipes = get_possible_recipes(user_choices) # for now until electre method work
             template_name = 'recipes/recommended_recipes.html'
