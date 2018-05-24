@@ -13,8 +13,7 @@ class SearchRecipeForm(forms.Form):
                  ('weganska', 'weganska'),
                  ('wegetarianska', 'wegetarianska'),
                  ('bez glutenu', 'bez glutenu'),
-                 ('bez laktozy', 'bez laktozy'),
-                 ('brak', 'brak')
+                 ('bez laktozy', 'bez laktozy')
                  )
     DIFFICULTY_LEVEL = (('brak', 'brak'),
                         ('latwy', 'latwy'),

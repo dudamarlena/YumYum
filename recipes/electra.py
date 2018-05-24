@@ -3,8 +3,15 @@ import numpy as np
 from .recipes_utils import recipes
 
 
-def electre_method(user_choices):
+def get_sorted_recipes(user_choices, electre_method):
     recipes = get_possible_recipes(user_choices)
+    electre_values = electre_method(user_choices, recipes)
+    sorted_names = sort_recipes(electre_values, recipes)
+    electre_data = [recipe for name in sorted_names for recipe in recipes if name == recipe['name']]
+    return electre_data
+
+
+def electre_I_method(user_choices, recipes):
     time, cost, kcal = get_criteria(recipes)
     weights = get_weight()
     fi_array = get_fi_array(time, cost, kcal, weights)
@@ -12,8 +19,7 @@ def electre_method(user_choices):
     return c_array
 
 
-def electre_III_method(user_choices):
-    recipes = get_possible_recipes(user_choices)
+def electre_III_method(user_choices, recipes):
     time, cost, kcal = get_criteria(recipes)
     weights = get_weight()
     preference_thresholds = get_preference_thresholds()
@@ -22,8 +28,7 @@ def electre_III_method(user_choices):
     fi_array = get_fi3_array(time, cost, kcal, weights, preference_thresholds, equivalence_thresholds)
     c_array = get_c_array(fi_array)
     reliability_coefficient = get_reliability_coefficient([time, cost, kcal], c_array, preference_thresholds, veto)
-    recipes_dictionary = get_dictionary(reliability_coefficient, recipes)
-    return sort_recipes(recipes_dictionary)  # doesn't work until sort_recipes method work
+    return reliability_coefficient
 
 
 def get_reliability_coefficient(criteria, c_array, preference_thresholds, veto):
@@ -125,8 +130,11 @@ def get_possible_recipes(user_choices):
         condition4 = recipe['meal type'] == user_choices['meal type'] or user_choices['meal type'] == 'brak'
         condition5 = [ingredient for ingredient in split_strings(recipe['ingredients']) if
                       any(allergen in ingredient for allergen in split_strings(user_choices['allergens']))]
-        condition6 = [ingredient for ingredient in split_strings(recipe['ingredients']) if
-                      any(allergen in ingredient for allergen in split_strings(user_choices['products']))]
+        ingredients = split_strings(recipe['ingredients'])
+        ingredients.append('brak')
+        condition6 = [ingredient for ingredient in ingredients if
+                      any(products in ingredient for products in split_strings(user_choices['products'])) or recipe[
+                          'ingredients'] == 'brak']
         condition7 = int(user_choices['prepare_time']) >= int(recipe['prepare_time'])
         condition8 = int(user_choices['calorie']) >= int(recipe['calorie'])
         condition9 = int(user_choices['cost']) >= int(recipe['cost'])
@@ -154,7 +162,10 @@ def get_dictionary(electre_values, recipes):
     return electre_data
 
 
-def sort_recipes(recipes_dictionary):
-    # return sorted recipes dictionary in the same format like in recipes_utils
-    # {'name': '', 'diet type': '', 'cuisine': '', 'difficulty level': '', 'meal type': '', 'ingredients': '', 'prepare time': '', 'calorie': '', 'cost': ''}
-    pass
+def sort_recipes(reliability_coefficient, recipes):
+    reliability_coefficient = np.array(reliability_coefficient)
+    recipes_names = [name['name'] for name in recipes]
+    c_sqrt = int(np.sqrt(len(reliability_coefficient)))
+    sum_values = [sum(row) for row in reliability_coefficient.reshape((c_sqrt, c_sqrt))]
+    sorted_indexes = sorted(range(len(sum_values)), key=lambda x: sum_values[x])
+    return [recipes_names[index] for index in sorted_indexes][::-1]

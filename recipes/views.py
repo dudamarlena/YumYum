@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 
-from .electra import electre_III_method, get_possible_recipes
+from .electra import get_sorted_recipes, electre_I_method, electre_III_method
 from .models import Recipe
 from .forms import SearchRecipeForm
 
@@ -33,8 +33,7 @@ def search_recipe(request):
                             'meal type': form.data['meal_type'], 'allergens': form.data['allergens'],
                             'prepare_time': form.data['prepare_time'], 'calorie': form.data['calorie'],
                             'cost': form.data['cost'],'products': form.data['products']}
-            # electre_list = electre_III_method(user_choices)
-            recipes = get_possible_recipes(user_choices) # for now until electre method work
+            recipes = get_sorted_recipes(user_choices,electre_III_method)
             template_name = 'recipes/recommended_recipes.html'
             return render(request, template_name, {'recipes': recipes})
     else:

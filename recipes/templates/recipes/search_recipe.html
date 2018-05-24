@@ -6,7 +6,7 @@
     <h1>Szukaj przepisów</h1>
 
     <form method="POST"> {%csrf_token%}
-        {{ form.as_p }}
+        <b> {{ form.as_p }} </b>
         <button type="submit">Szukaj</button>
     </form>
 </div>
