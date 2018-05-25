@@ -7,13 +7,12 @@ def get_sorted_recipes(user_choices, electre_method):
     recipes = get_possible_recipes(user_choices)
     electre_values = electre_method(user_choices, recipes)
     sorted_names = sort_recipes(electre_values, recipes)
-    electre_data = [recipe for name in sorted_names for recipe in recipes if name == recipe['name']]
-    return electre_data
+    return [recipe for name in sorted_names for recipe in recipes if name == recipe['name']]
 
 
 def electre_I_method(user_choices, recipes):
     time, cost, kcal = get_criteria(recipes)
-    weights = get_weight()
+    weights = get_weight(user_choices)
     fi_array = get_fi_array(time, cost, kcal, weights)
     c_array = get_c_array(fi_array)
     return c_array
@@ -21,10 +20,10 @@ def electre_I_method(user_choices, recipes):
 
 def electre_III_method(user_choices, recipes):
     time, cost, kcal = get_criteria(recipes)
-    weights = get_weight()
+    weights = get_weight(user_choices)
     preference_thresholds = get_preference_thresholds()
     equivalence_thresholds = get_equivalence_thresholds()
-    veto = get__veto()
+    veto = get__veto(user_choices)
     fi_array = get_fi3_array(time, cost, kcal, weights, preference_thresholds, equivalence_thresholds)
     c_array = get_c_array(fi_array)
     reliability_coefficient = get_reliability_coefficient([time, cost, kcal], c_array, preference_thresholds, veto)
@@ -67,11 +66,11 @@ def get_fi_array(time, cost, kcal, weights):
 
 def get_fi3_array(time, cost, kcal, weights, preference_thresholds, equivalence_thresholds):
     fi1 = np.array([list(
-        map(lambda x: x * weights[0], get_fi_list_III(time, preference_thresholds[0], equivalence_thresholds[0])))])
+        map(lambda x: x * weights[0], get_fi_list_III(cost, preference_thresholds[0], equivalence_thresholds[0])))])
     fi2 = np.array([list(
-        map(lambda x: x * weights[1], get_fi_list_III(cost, preference_thresholds[1], equivalence_thresholds[1])))])
+        map(lambda x: x * weights[1], get_fi_list_III(kcal, preference_thresholds[1], equivalence_thresholds[1])))])
     fi3 = np.array([list(
-        map(lambda x: x * weights[2], get_fi_list_III(kcal, preference_thresholds[2], equivalence_thresholds[2])))])
+        map(lambda x: x * weights[2], get_fi_list_III(time, preference_thresholds[2], equivalence_thresholds[2])))])
     return np.concatenate((fi1, fi2, fi3), axis=0)
 
 
@@ -97,14 +96,32 @@ def get_fi_list_III(criterium, preference_thresholds, equivalence_thresholds):
 
 
 def get_criteria(recipes):
-    time = [recipe['prepare_time'] for recipe in recipes]
     cost = [recipe['cost'] for recipe in recipes]
     kcal = [recipe['calorie'] for recipe in recipes]
+    time = [recipe['prepare_time'] for recipe in recipes]
     return list(product(time, time)), list(product(cost, cost)), list(product(kcal, kcal))
 
 
-def get_weight():
-    return [0.3, 0.1, 0.6]
+def get_weight(user_choices):
+    cost_kcal = int(user_choices['cost_kcal'])
+    cost_time = int(user_choices['cost_time'])
+    kcal_time = int(user_choices['kcal_time'])
+    kcal_cost = 1 / cost_kcal
+    time_cost = 1 / cost_time
+    time_kcal = 1 / kcal_time
+    A = np.array([[1, cost_kcal, cost_time], [kcal_cost, 1, kcal_time], [time_cost, time_kcal, 1]])
+    A_sum = [sum(a) for a in np.transpose(A)]
+    B = get_B_array(A, A_sum)
+    B_sum = [sum(b) for b in B]
+    return [b / 3 for b in B_sum]
+
+
+def get_B_array(A, A_sum, l=3):
+    B = np.zeros(shape=(l, l))
+    for i in range(l):
+        for j in range(l):
+            B[j][i] = A[j][i] / A_sum[i]
+    return B
 
 
 def get_preference_thresholds():
@@ -115,8 +132,8 @@ def get_equivalence_thresholds():
     return [0, 0, 0]
 
 
-def get__veto():
-    return [0, 0, 0]
+def get__veto(user_choices):
+    return [int(user_choices['veto_cost']), int(user_choices['veto_kcal']), int(user_choices['veto_time'])]
 
 
 def get_possible_recipes(user_choices):
@@ -152,20 +169,20 @@ def get_all_recipes():
 
 
 def get_dictionary(electre_values, recipes):
-    name_list = []
-    for recipe in recipes:
-        name_list.append(recipe['name'])
+    name_list = [recipe['name'] for recipe in recipes]
     prod_list = zip(list(product(name_list, name_list)), electre_values)
-    electre_data = []
-    for pair in (prod_list):
-        electre_data.append({'pair': pair[0], 'value': pair[1]})
-    return electre_data
+    return [{'pair': pair[0], 'value': pair[1]} for pair in (prod_list)]
 
 
 def sort_recipes(reliability_coefficient, recipes):
     reliability_coefficient = np.array(reliability_coefficient)
     recipes_names = [name['name'] for name in recipes]
     c_sqrt = int(np.sqrt(len(reliability_coefficient)))
-    sum_values = [sum(row) for row in reliability_coefficient.reshape((c_sqrt, c_sqrt))]
+    reliability_coefficient = reliability_coefficient.reshape((c_sqrt, c_sqrt))
+    sum_values = [sum(row) for row in reliability_coefficient]
     sorted_indexes = sorted(range(len(sum_values)), key=lambda x: sum_values[x])
-    return [recipes_names[index] for index in sorted_indexes][::-1]
+    min_index = sorted_indexes.index(min(sorted_indexes))
+    best_ratio = reliability_coefficient[min_index]
+    for index, recipe in enumerate(recipes):
+        recipe['ratio'] = round(best_ratio[index] * 100)
+    return [recipes_names[index] for index in sorted_indexes]

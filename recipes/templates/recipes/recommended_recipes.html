@@ -12,6 +12,7 @@
         }
 
 
+
 </style>
 <div class="row">
     <h2>Przepisy dla Ciebie</h2>
@@ -23,6 +24,7 @@
             <th>Koszt</th>
             <th>Kalorie</th>
             <th>Czas przygotowania</th>
+            <th>Stosunek najlepszego do pozostałych [%]</th>
         </tr>
         {% for obj in recipes %}
         <tr>
@@ -30,6 +32,7 @@
             <td>{{obj.cost}}</td>
             <td>{{obj.calorie}}</td>
             <td>{{obj.prepare_time}}</td>
+            <td>{{obj.ratio}}</td>
         </tr>
         {% endfor %}
 

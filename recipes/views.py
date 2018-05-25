@@ -23,7 +23,6 @@ class RecipeDetailView(DetailView):
         return context
 
 
-
 def search_recipe(request):
     if request.method == 'POST':
         form = SearchRecipeForm(request.POST)
@@ -32,8 +31,11 @@ def search_recipe(request):
                             'difficulty level': form.data['difficulty_level'],
                             'meal type': form.data['meal_type'], 'allergens': form.data['allergens'],
                             'prepare_time': form.data['prepare_time'], 'calorie': form.data['calorie'],
-                            'cost': form.data['cost'],'products': form.data['products']}
-            recipes = get_sorted_recipes(user_choices,electre_III_method)
+                            'cost': form.data['cost'], 'products': form.data['products'],
+                            'cost_kcal': form.data['cost_kcal'], 'cost_time': form.data['cost_time'],
+                            'kcal_time': form.data['kcal_time'], 'veto_time': form.data['veto_time'],
+                            'veto_cost': form.data['veto_cost'], 'veto_kcal': form.data['veto_kcal']}
+            recipes = get_sorted_recipes(user_choices, electre_III_method)
             template_name = 'recipes/recommended_recipes.html'
             return render(request, template_name, {'recipes': recipes})
     else:

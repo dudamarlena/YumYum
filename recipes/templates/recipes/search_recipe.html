@@ -6,7 +6,25 @@
     <h1>Szukaj przepisów</h1>
 
     <form method="POST"> {%csrf_token%}
-        <b> {{ form.as_p }} </b>
+        <p><b>Rodzaj kuchni:</b> {{ form.cuisine }}</p>
+        <p><b>Rodzaj posiłku:</b> {{ form.meal_type }}</p>
+        <p><b>Rodzaj diety:</b> {{ form.diet_type }}</p>
+        <p><b>Poziom trudności:</b> {{ form.difficulty_level }}</p>
+        <p><b>Ilość kalorii:</b> {{ form.calorie }}</p>
+        <p><b>Alergeny:</b> {{ form.allergens }}</p>
+        <p><b>Produkty, które mamy w lodówce:</b> {{ form.products }}</p>
+        <p><b>Czas przygotowania:</b> {{ form.prepare_time }}</p>
+        <p><b>Kosz dokupienia składników:</b> {{ form.cost }}</p>
+        <h3>Co jest dla Ciebie ważniejsze ? </h3>
+        <p>Wpisz wartości: 1- mniej ważne, 9- zdecydowanie ważniejsze </p>
+        <p><b>Koszt czy ilość kalorii?</b> {{ form.cost_kcal }}</p>
+        <p><b>Koszt czy czas przygotowania?</b> {{ form.cost_time }}</p>
+        <p><b>Ilość kalorii czy czas przygotowania?</b> {{ form.kcal_time }}</p>
+        <p></p>
+        <h3>Jaka maksymalnie może być różnica pomiędzy kryteriami ? </h3>
+        <p><b>Koszt:</b> {{ form.veto_cost }}</p>
+        <p><b>Czas przygotowania:</b> {{ form.veto_time }}</p>
+        <p><b>Ilość kalorii:</b> {{ form.veto_kcal }}</p>
         <button type="submit">Szukaj</button>
     </form>
 </div>
